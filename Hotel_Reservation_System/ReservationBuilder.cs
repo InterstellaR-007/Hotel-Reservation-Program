@@ -8,10 +8,13 @@ namespace Hotel_Reservation_System
 {
     public class ReservationBuilder
     {
+        List<HotelDetail> cheapestHotelsList = new List<HotelDetail>();
+        List<HotelDetail> cheapestBestRatedHotelsList = new List<HotelDetail>();
+
         List<HotelDetail> hotel_list = new List<HotelDetail> {
-                new HotelDetail { hotel_Name="Lakewood",hotel_WeekdayRate=110,hotel_WeekendRate=90},
-                new HotelDetail{ hotel_Name="Bridgewood",hotel_WeekdayRate=150,hotel_WeekendRate=50},
-                new HotelDetail{hotel_Name="Ridgewood",hotel_WeekdayRate=220,hotel_WeekendRate=150}
+                new HotelDetail { hotel_Name="Lakewood",hotel_WeekdayRate=110,hotel_WeekendRate=90,hotel_Rating=3},
+                new HotelDetail{ hotel_Name="Bridgewood",hotel_WeekdayRate=150,hotel_WeekendRate=50,hotel_Rating=4},
+                new HotelDetail{hotel_Name="Ridgewood",hotel_WeekdayRate=220,hotel_WeekendRate=150,hotel_Rating=5}
 
             };
         public int total_WeekendDays(DateTime firstDate, DateTime lastDate)
@@ -38,10 +41,11 @@ namespace Hotel_Reservation_System
 
         public void findCheapestHotel(DateTime firstDate, DateTime lastDate)
         {
+            int BestHotelRating = 0;
             int total_Days = Convert.ToInt32(lastDate.Subtract(firstDate).TotalDays) +1;
             int WeekendDays = total_WeekendDays(firstDate, lastDate);
             int WeekDays = total_Days - WeekendDays;
-            List<HotelDetail> cheapestHotelsList = new List<HotelDetail>();
+            
 
             
             HotelDetail cheapest_Hotel = new HotelDetail();
@@ -58,8 +62,21 @@ namespace Hotel_Reservation_System
                     cheapestHotelsList.Add(hotel);
             }
 
+            BestHotelRating = (cheapestHotelsList.First()).hotel_Rating;
+
             foreach(var hotel in cheapestHotelsList)
-                Console.WriteLine(hotel.hotel_Name + "" + "Total Cost :" + getTotalRate(hotel,WeekDays,WeekendDays));
+            {
+                BestHotelRating = hotel.hotel_Rating > BestHotelRating ? hotel.hotel_Rating : BestHotelRating;
+            }
+            
+            foreach(var hotel in cheapestHotelsList)
+            {
+                if (hotel.hotel_Rating == BestHotelRating)
+                    cheapestBestRatedHotelsList.Add(hotel);
+            }
+
+            foreach(var hotel in cheapestBestRatedHotelsList)
+                Console.WriteLine(hotel.hotel_Name + " Rating is :" + hotel.hotel_Rating + " Total Cost :" +" "+ getTotalRate(hotel,WeekDays,WeekendDays));
         }
     }
 }
