@@ -28,24 +28,38 @@ namespace Hotel_Reservation_System
             return count;
             
         }
+        public int getTotalRate(HotelDetail hotel,int weekDays,int weekendDays)
+        {
+            if (hotel != null)
+                return (hotel.hotel_WeekdayRate * weekDays) + (hotel.hotel_WeekendRate * weekendDays);
+            else
+                return -1;
+        }
 
         public void findCheapestHotel(DateTime firstDate, DateTime lastDate)
         {
             int total_Days = Convert.ToInt32(lastDate.Subtract(firstDate).TotalDays) +1;
             int WeekendDays = total_WeekendDays(firstDate, lastDate);
             int WeekDays = total_Days - WeekendDays;
+            List<HotelDetail> cheapestHotelsList = new List<HotelDetail>();
 
-
-
+            
             HotelDetail cheapest_Hotel = new HotelDetail();
             cheapest_Hotel = hotel_list.First();
             
             foreach(var hotel in hotel_list)
             {
-                cheapest_Hotel = hotel.hotel_WeekdayRate * total_Days <= cheapest_Hotel.hotel_WeekdayRate * total_Days ? hotel : cheapest_Hotel;
+                cheapest_Hotel = getTotalRate(hotel,WeekDays,WeekendDays)<getTotalRate(cheapest_Hotel, WeekDays, WeekendDays) ? hotel : cheapest_Hotel;
             }
 
-            Console.WriteLine(cheapest_Hotel.hotel_Name + "" + "Total Cost :" + cheapest_Hotel.hotel_WeekdayRate * total_Days);
+            foreach(var hotel in hotel_list)
+            {
+                if (getTotalRate(hotel, WeekDays, WeekendDays) == getTotalRate(cheapest_Hotel, WeekDays, WeekendDays))
+                    cheapestHotelsList.Add(hotel);
+            }
+
+            foreach(var hotel in cheapestHotelsList)
+                Console.WriteLine(hotel.hotel_Name + "" + "Total Cost :" + getTotalRate(hotel,WeekDays,WeekendDays));
         }
     }
 }
