@@ -9,9 +9,9 @@ namespace Hotel_Reservation_System
     public class ReservationBuilder
     {
         List<HotelDetail> hotel_list = new List<HotelDetail> {
-                new HotelDetail { hotel_Name="Lakewood",hotel_WeekdayRate=110,hotel_WeekendRate=80},
-                new HotelDetail{ hotel_Name="Bridgewood",hotel_WeekdayRate=160,hotel_WeekendRate=110},
-                new HotelDetail{hotel_Name="Ridgewood",hotel_WeekdayRate=220,hotel_WeekendRate=100}
+                new HotelDetail { hotel_Name="Lakewood",hotel_WeekdayRate=110,hotel_WeekendRate=90},
+                new HotelDetail{ hotel_Name="Bridgewood",hotel_WeekdayRate=150,hotel_WeekendRate=50},
+                new HotelDetail{hotel_Name="Ridgewood",hotel_WeekdayRate=220,hotel_WeekendRate=150}
 
             };
         public int total_WeekendDays(DateTime firstDate, DateTime lastDate)
