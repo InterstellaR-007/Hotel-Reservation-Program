@@ -11,16 +11,31 @@ namespace Hotel_Reservation_System
         List<HotelDetail> cheapestHotelsList = new List<HotelDetail>();
         List<HotelDetail> cheapestBestRatedHotelsList = new List<HotelDetail>();
 
+        public enum customerType
+        {
+            normal,reward
+        }
+
         public int total_Days;
         public int WeekendDays;
         public int WeekDays;
 
-        List<HotelDetail> hotel_list = new List<HotelDetail> {
-                new HotelDetail { hotel_Name="Lakewood",hotel_WeekdayRate=110,hotel_WeekendRate=90,hotel_Rating=3},
-                new HotelDetail{ hotel_Name="Bridgewood",hotel_WeekdayRate=150,hotel_WeekendRate=50,hotel_Rating=4},
-                new HotelDetail{hotel_Name="Ridgewood",hotel_WeekdayRate=220,hotel_WeekendRate=150,hotel_Rating=5}
+        Dictionary<customerType, List<HotelDetail>> CustomerBased_hotelList = new Dictionary<customerType, List<HotelDetail>>()
+        {
+            { customerType.normal, new List<HotelDetail>{new HotelDetail { Name="Lakewood",WeekdayRate=110, WeekendRate=90,Rating=3},
+                new HotelDetail{ Name="Bridgewood",WeekdayRate=150,WeekendRate=50,Rating=4},
+                new HotelDetail{Name="Ridgewood",WeekdayRate=220,WeekendRate=150,Rating=5} } },
+            { customerType.reward, new List<HotelDetail>{new HotelDetail { Name="Lakewood",WeekdayRate=80, WeekendRate=80,Rating=3},
+                new HotelDetail{ Name="Bridgewood",WeekdayRate=110,WeekendRate=50,Rating=4},
+                new HotelDetail{Name="Ridgewood",WeekdayRate=100,WeekendRate=40,Rating=5}} }
+        };
 
-            }; 
+        //List<HotelDetail> hotel_list = new List<HotelDetail> {
+        //        new HotelDetail { Name="Lakewood",WeekdayRate=110, WeekendRate=90,Rating=3},
+        //        new HotelDetail{ Name="Bridgewood",WeekdayRate=150,WeekendRate=50,Rating=4},
+        //        new HotelDetail{Name="Ridgewood",WeekdayRate=220,WeekendRate=150,Rating=5}
+
+        //    }; 
         public int total_WeekendDays(DateTime firstDate, DateTime lastDate)
         {
             int count = 0;
@@ -38,13 +53,15 @@ namespace Hotel_Reservation_System
         public int getTotalRate(HotelDetail hotel)
         {
             if (hotel != null)
-                return (hotel.hotel_WeekdayRate * WeekDays) + (hotel.hotel_WeekendRate * WeekendDays);
+                return (hotel.WeekdayRate * WeekDays) + (hotel.WeekendRate * WeekendDays);
             else
                 return -1;
         }
 
-        public void findCheapestBestHotel(DateTime firstDate, DateTime lastDate)
+        public void findCheapestBestHotel(DateTime firstDate, DateTime lastDate,customerType type)
         {
+            int WeekdayRate;
+            int WeekendRate;          
             
             total_Days = Convert.ToInt32(lastDate.Subtract(firstDate).TotalDays) +1;
             WeekendDays = total_WeekendDays(firstDate, lastDate);
@@ -54,8 +71,9 @@ namespace Hotel_Reservation_System
             
             HotelDetail cheapestBestHotel = new HotelDetail();
             int cheapestRate = 0;
-            
-           
+
+
+            List<HotelDetail> hotel_list = CustomerBased_hotelList[type];
 
             hotel_list.Sort((x, y) => ((getTotalRate(x)).CompareTo(getTotalRate(y))));
             cheapestRate = getTotalRate(hotel_list.First()); 
@@ -64,31 +82,33 @@ namespace Hotel_Reservation_System
             cheapestBestRatedHotelsList = hotel_list.FindAll(x => getTotalRate(x).Equals(cheapestRate));
 
 
-            cheapestBestRatedHotelsList.Sort((x, y) => (y.hotel_Rating).CompareTo(x.hotel_Rating));
-            int bestCheapestRating = cheapestBestRatedHotelsList.First().hotel_Rating;
+            cheapestBestRatedHotelsList.Sort((x, y) => (y.Rating).CompareTo(x.Rating));
+            int bestCheapestRating = cheapestBestRatedHotelsList.First().Rating;
 
-            foreach(var hotel in cheapestBestRatedHotelsList.FindAll(x=> x.hotel_Rating.Equals(bestCheapestRating)))
+            foreach(var hotel in cheapestBestRatedHotelsList.FindAll(x=> x.Rating.Equals(bestCheapestRating)))
             {
-                Console.WriteLine(hotel.hotel_Name + " Rating is :" + hotel.hotel_Rating + " Total Cost :" + " " + getTotalRate(hotel));
+                Console.WriteLine(hotel.Name + " Rating is :" + hotel.Rating + " Total Cost :" + " " + getTotalRate(hotel));
             }
         }
 
-        public void FindBestRatedHotel(DateTime firstDate,DateTime lastDate)
+        public void FindBestRatedHotel(DateTime firstDate,DateTime lastDate,customerType type)
         {
             total_Days = Convert.ToInt32(lastDate.Subtract(firstDate).TotalDays) + 1;
             WeekendDays = total_WeekendDays(firstDate, lastDate);
             WeekDays = total_Days - WeekendDays;
 
-            hotel_list.Sort((x, y) => (x.hotel_Rating).CompareTo(y.hotel_Rating));
+            List<HotelDetail> hotel_list = CustomerBased_hotelList[type];
 
-            int BestRating = (hotel_list.Last()).hotel_Rating;
+            hotel_list.Sort((x, y) => (x.Rating).CompareTo(y.Rating));
+
+            int BestRating = (hotel_list.Last()).Rating;
 
 
             Console.WriteLine("Best Rated Hotels are as follows ");
 
-            foreach(var hotel in hotel_list.FindAll(x => x.hotel_Rating.Equals(BestRating)))
+            foreach(var hotel in hotel_list.FindAll(x => x.Rating.Equals(BestRating)))
             {
-                Console.WriteLine(hotel.hotel_Name + " Rating is :" + hotel.hotel_Rating + " Total Cost :" + " " + getTotalRate(hotel));
+                Console.WriteLine(hotel.Name + " Rating is :" + hotel.Rating + " Total Cost :" + " " + getTotalRate(hotel));
             }
         }
     }

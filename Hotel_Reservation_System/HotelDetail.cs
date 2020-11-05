@@ -6,10 +6,15 @@ namespace Hotel_Reservation_System
 {
     public class HotelDetail
     {
-        public string hotel_Name { get; set; }
-        public int hotel_WeekdayRate { get; set; }
-        public int hotel_WeekendRate { get; set; }
-        public int hotel_Rating { get; set; }
+        public enum customerType
+        {
+            normal,reward
+        }
+        public string Name { get; set; }
+        public int WeekdayRate { get; set; }
+        public int WeekendRate { get; set; }
+
+        public int Rating { get; set; }
 
 
     }
