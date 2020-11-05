@@ -16,7 +16,7 @@ namespace Hotel_Reservation_System
             DateTime lastDate = Convert.ToDateTime(Console.ReadLine());
 
             ReservationBuilder reservation = new ReservationBuilder();
-            reservation.findCheapestHotel(firstDate,lastDate);
+            reservation.FindBestRatedHotel(firstDate,lastDate);
 
             
             
