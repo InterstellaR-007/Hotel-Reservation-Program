@@ -11,7 +11,7 @@ namespace Hotel_Reservation_System
         {
             Console.WriteLine("Welcome to Hotel reservation Program");
 
-            Console.WriteLine("Enter first date :");
+            Console.WriteLine("Enter first date :<d/M/yyyy", "dd/M/yyyy", "d/MM/yyyy", "dd/MM/yyyy", "yyyy-MM-dd", "yyyy-M-d", "yyyy-M-dd>");
             DateTime firstDate = Convert.ToDateTime(Console.ReadLine());
 
             var formats = new[] { "d/M/yyyy", "dd/M/yyyy", "d/MM/yyyy", "dd/MM/yyyy","yyyy-MM-dd","yyyy-M-d","yyyy-M-dd" };
@@ -24,7 +24,7 @@ namespace Hotel_Reservation_System
                 firstDate = Convert.ToDateTime(Console.ReadLine());
             }
 
-            Console.WriteLine("Enter last date :");
+            Console.WriteLine("Enter last date :<d/M/yyyy", "dd/M/yyyy", "d/MM/yyyy", "dd/MM/yyyy", "yyyy-MM-dd", "yyyy-M-d", "yyyy-M-dd>");
             DateTime lastDate = Convert.ToDateTime(Console.ReadLine());
 
             while (!DateTime.TryParseExact(lastDate.ToShortDateString(), formats, null, DateTimeStyles.None, out dt))
