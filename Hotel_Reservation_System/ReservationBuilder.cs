@@ -30,12 +30,21 @@ namespace Hotel_Reservation_System
                 new HotelDetail{Name="Ridgewood",WeekdayRate=100,WeekendRate=40,Rating=5}} }
         };
 
-        //List<HotelDetail> hotel_list = new List<HotelDetail> {
-        //        new HotelDetail { Name="Lakewood",WeekdayRate=110, WeekendRate=90,Rating=3},
-        //        new HotelDetail{ Name="Bridgewood",WeekdayRate=150,WeekendRate=50,Rating=4},
-        //        new HotelDetail{Name="Ridgewood",WeekdayRate=220,WeekendRate=150,Rating=5}
 
-        //    }; 
+        public void get_Hotel_List()
+        {
+            foreach (var item in CustomerBased_hotelList)
+            {
+                Console.WriteLine("Customer type: " + item.Key);
+                foreach (var hotel in item.Value)
+                {
+                    Console.WriteLine("Hotel Name: " + hotel.Name + " WeekdayRate : " + hotel.WeekdayRate + " WeekendRate : " + hotel.WeekendRate + " Rating : " + hotel.Rating);
+                }
+                Console.WriteLine("\n");
+
+            }
+        }
+
         public int total_WeekendDays(DateTime firstDate, DateTime lastDate)
         {
             int count = 0;
@@ -60,8 +69,7 @@ namespace Hotel_Reservation_System
 
         public void findCheapestBestHotel(DateTime firstDate, DateTime lastDate,customerType type)
         {
-            int WeekdayRate;
-            int WeekendRate;          
+                  
             
             total_Days = Convert.ToInt32(lastDate.Subtract(firstDate).TotalDays) +1;
             WeekendDays = total_WeekendDays(firstDate, lastDate);
@@ -83,12 +91,15 @@ namespace Hotel_Reservation_System
 
 
             cheapestBestRatedHotelsList.Sort((x, y) => (y.Rating).CompareTo(x.Rating));
+
+            Console.WriteLine("Cheapest Rated Hotels are as follows: ");
             int bestCheapestRating = cheapestBestRatedHotelsList.First().Rating;
 
             foreach(var hotel in cheapestBestRatedHotelsList.FindAll(x=> x.Rating.Equals(bestCheapestRating)))
             {
                 Console.WriteLine(hotel.Name + " Rating is :" + hotel.Rating + " Total Cost :" + " " + getTotalRate(hotel));
             }
+            Console.WriteLine("\n ");
         }
 
         public void FindBestRatedHotel(DateTime firstDate,DateTime lastDate,customerType type)
@@ -110,6 +121,7 @@ namespace Hotel_Reservation_System
             {
                 Console.WriteLine(hotel.Name + " Rating is :" + hotel.Rating + " Total Cost :" + " " + getTotalRate(hotel));
             }
+            Console.WriteLine("\n");
         }
     }
 }
